@@ -1,0 +1,44 @@
+apply plugin: 'com.android.application'
+android {
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+    defaultConfig {
+        applicationId "com.android.deskclock"
+        minSdkVersion 19
+        targetSdkVersion 26
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+    productFlavors {
+    }
+}
+
+repositories {
+    maven {
+        url 'https://maven.google.com'
+        // Alternative URL is 'https://dl.google.com/dl/android/maven2/'
+    }
+}
+
+
+dependencies {
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:percent:26.1.0'
+    compile 'com.android.support:transition'
+    compile 'com.android.support:support-compat:26.1.0'
+    compile 'com.android.support:support-core-utils:26.1.0'
+    compile 'com.android.support:support-core-ui:26.1.0'
+    compile 'com.android.support:support-media-compat:26.1.0'
+    compile 'com.android.support:support-fragment:26.1.0'
+    compile 'com.android.support:support-v13:26.1.0'
+    compile 'com.android.support:preference-v14:26.1.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:gridlayout-v7:26.1.0'
+    compile 'com.android.support:preference-v7:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    //compile 'com.android.support:support-compat:26.1.0'
+}
