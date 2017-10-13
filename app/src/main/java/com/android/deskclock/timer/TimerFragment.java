@@ -27,6 +27,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayout;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +84,9 @@ public final class TimerFragment extends DeskClockFragment {
     private View mTimersView;
     private View mCurrentView;
     private ImageView[] mPageIndicators;
+    private ImageView mGridViewButton;
+    private ImageView mScrollViewButton;
+    private GridLayout mGridLayout;
 
     private Serializable mTimerSetupState;
 
@@ -120,6 +124,13 @@ public final class TimerFragment extends DeskClockFragment {
                 (ImageView) view.findViewById(R.id.page_indicator2),
                 (ImageView) view.findViewById(R.id.page_indicator3)
         };
+        mGridViewButton = view.findViewById(R.id.grid_view_button);
+        mScrollViewButton = view.findViewById(R.id.scroll_view_button);
+
+        mGridViewButton.setOnClickListener(new GridViewButtonListener());
+        mScrollViewButton.setOnClickListener(new ScrollViewButtonListener());
+
+        mGridLayout = view.findViewById(R.id.timer_grid_view);
 
         DataModel.getDataModel().addTimerListener(mAdapter);
         DataModel.getDataModel().addTimerListener(mTimerWatcher);
@@ -695,6 +706,30 @@ public final class TimerFragment extends DeskClockFragment {
 
     private void stopUpdatingTime() {
         mViewPager.removeCallbacks(mTimeUpdateRunnable);
+    }
+
+    /**
+     * Switch view to grid view
+     */
+    private class GridViewButtonListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            mTimersView.setVisibility(GONE);
+            mGridLayout.setVisibility(VISIBLE);
+        }
+    }
+
+    /**
+     * Switch view to scroll view
+     */
+    private class ScrollViewButtonListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            mTimersView.setVisibility(VISIBLE);
+            mGridLayout.setVisibility(GONE);
+        }
     }
 
     /**
