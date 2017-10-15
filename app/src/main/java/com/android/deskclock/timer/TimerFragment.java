@@ -27,7 +27,6 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayout;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +35,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.android.deskclock.AnimatorUtils;
@@ -86,12 +86,13 @@ public final class TimerFragment extends DeskClockFragment {
     private ImageView[] mPageIndicators;
     private ImageView mGridViewButton;
     private ImageView mScrollViewButton;
-    private GridLayout mGridLayout;
+    private GridView mGridView;
 
     private Serializable mTimerSetupState;
 
     /** {@code true} while this fragment is creating a new timer; {@code false} otherwise. */
     private boolean mCreatingTimer;
+    private TimerPagerListAdapterDecorator mGridAdapter;
 
     /**
      * @return an Intent that selects the timers tab with the setup screen for a new timer in place.
@@ -111,6 +112,7 @@ public final class TimerFragment extends DeskClockFragment {
         final View view = inflater.inflate(R.layout.timer_fragment, container, false);
 
         mAdapter = new TimerPagerAdapter(getFragmentManager());
+        mGridAdapter = new TimerPagerListAdapterDecorator(getFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.vertical_view_pager);
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(mTimerPageChangeListener);
@@ -130,7 +132,8 @@ public final class TimerFragment extends DeskClockFragment {
         mGridViewButton.setOnClickListener(new GridViewButtonListener());
         mScrollViewButton.setOnClickListener(new ScrollViewButtonListener());
 
-        mGridLayout = view.findViewById(R.id.timer_grid_view);
+        mGridView = view.findViewById(R.id.timer_grid_view);
+        mGridView.setAdapter(mGridAdapter);
 
         DataModel.getDataModel().addTimerListener(mAdapter);
         DataModel.getDataModel().addTimerListener(mTimerWatcher);
@@ -716,7 +719,7 @@ public final class TimerFragment extends DeskClockFragment {
         @Override
         public void onClick(View v) {
             mTimersView.setVisibility(GONE);
-            mGridLayout.setVisibility(VISIBLE);
+            mGridView.setVisibility(VISIBLE);
         }
     }
 
@@ -728,7 +731,7 @@ public final class TimerFragment extends DeskClockFragment {
         @Override
         public void onClick(View v) {
             mTimersView.setVisibility(VISIBLE);
-            mGridLayout.setVisibility(GONE);
+            mGridView.setVisibility(GONE);
         }
     }
 

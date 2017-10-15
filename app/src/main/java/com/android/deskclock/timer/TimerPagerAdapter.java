@@ -116,6 +116,14 @@ class TimerPagerAdapter extends PagerAdapter implements TimerListener {
         mCurrentTransaction.remove(fragment);
     }
 
+    public Fragment getmCurrentPrimaryItem(){
+        return mCurrentPrimaryItem;
+    }
+
+    public Map<Integer, TimerItemFragment> getmFragments(){
+        return mFragments;
+    }
+
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         final Fragment fragment = (Fragment) object;
