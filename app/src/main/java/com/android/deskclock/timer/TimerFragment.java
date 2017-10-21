@@ -69,6 +69,8 @@ public final class TimerFragment extends DeskClockFragment {
 
     private static final String KEY_TIMER_SETUP_STATE = "timer_setup_input";
 
+    private static final String KEY_TIMER_VIEW_STATE = "timer_view_state";
+
     /** Notified when the user swipes vertically to change the visible timer. */
     private final TimerPageChangeListener mTimerPageChangeListener = new TimerPageChangeListener();
 
@@ -87,6 +89,7 @@ public final class TimerFragment extends DeskClockFragment {
     private ImageView mGridViewButton;
     private ImageView mScrollViewButton;
     private GridView mGridView;
+    private boolean mIsGridViewable = false;
 
     private Serializable mTimerSetupState;
 
@@ -141,6 +144,7 @@ public final class TimerFragment extends DeskClockFragment {
         // If timer setup state is present, retrieve it to be later honored.
         if (savedInstanceState != null) {
             mTimerSetupState = savedInstanceState.getSerializable(KEY_TIMER_SETUP_STATE);
+            mIsGridViewable = savedInstanceState.getBoolean(KEY_TIMER_VIEW_STATE);
         }
 
         return view;
@@ -221,6 +225,13 @@ public final class TimerFragment extends DeskClockFragment {
                 animateToView(mTimersView, null, false);
             }
         }
+        if (mIsGridViewable) {
+            mTimersView.setVisibility(GONE);
+            mGridView.setVisibility(VISIBLE);
+        } else {
+            mTimersView.setVisibility(VISIBLE);
+            mGridView.setVisibility(GONE);
+        }
     }
 
     @Override
@@ -248,6 +259,7 @@ public final class TimerFragment extends DeskClockFragment {
             mTimerSetupState = mCreateTimerView.getState();
             outState.putSerializable(KEY_TIMER_SETUP_STATE, mTimerSetupState);
         }
+        outState.putBoolean(KEY_TIMER_VIEW_STATE, mIsGridViewable);
     }
 
     private void updateFab(@NonNull ImageView fab, boolean animate) {
@@ -720,6 +732,7 @@ public final class TimerFragment extends DeskClockFragment {
         public void onClick(View v) {
             mTimersView.setVisibility(GONE);
             mGridView.setVisibility(VISIBLE);
+            mIsGridViewable = true;
         }
     }
 
@@ -732,6 +745,7 @@ public final class TimerFragment extends DeskClockFragment {
         public void onClick(View v) {
             mTimersView.setVisibility(VISIBLE);
             mGridView.setVisibility(GONE);
+            mIsGridViewable = false;
         }
     }
 
