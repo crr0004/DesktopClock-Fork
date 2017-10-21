@@ -1,15 +1,20 @@
 package com.android.deskclock.timer;
 
 import android.app.FragmentManager;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 
 import com.android.deskclock.R;
+import com.android.deskclock.TimerTextController;
 import com.android.deskclock.data.Timer;
 import com.android.deskclock.data.TimerListener;
+
+import java.util.Map;
 
 /**
  * Decorates TimerPagerAdapter into a ListAdapter so it can work with GridViews
@@ -19,6 +24,7 @@ import com.android.deskclock.data.TimerListener;
 public class TimerPagerListAdapterDecorator extends BaseAdapter implements TimerListener {
 
     private TimerPagerAdapter mTimerPagerAdapter;
+    private final Map<Integer, View> mViews = new ArrayMap<>();
     
     TimerPagerListAdapterDecorator(FragmentManager fragmentManager){
         mTimerPagerAdapter = new TimerPagerAdapter(fragmentManager);
@@ -43,11 +49,28 @@ public class TimerPagerListAdapterDecorator extends BaseAdapter implements Timer
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d("timerdecorator", "" + mTimerPagerAdapter.getCount());
-        final TimerItem view = (TimerItem) LayoutInflater.from(parent.getContext()).inflate(R.layout.timer_item, parent, false);
-        Timer timer = mTimerPagerAdapter.getTimer(position);
-        view.update(timer);
+        View result = mViews.get(position);
+        if(result == null){
+            result = LayoutInflater.from(parent.getContext()).inflate(R.layout.timer_item_griditem, parent, false);
+            Timer timer = mTimerPagerAdapter.getTimer(position);
+            EditText text = result.findViewById(R.id.timer_griditem_editText);
+            //view.update(timer);
+            text.setText(TimerTextController.GetTimeString(timer.getRemainingTime(), parent.getContext()));
+            mViews.put(position, result);
+        }
+        return result;
+    }
 
-        return view;
+    public boolean updateTime(){
+        boolean result = false;
+        for(int i : mViews.keySet()){
+            Timer timer = mTimerPagerAdapter.getTimer(i);
+            View view = mViews.get(i);
+            EditText text = view.findViewById(R.id.timer_griditem_editText);
+            //view.update(timer);
+            text.setText(TimerTextController.GetTimeString(timer.getRemainingTime(), view.getContext()));
+        }
+        return  result;
     }
 
     @Override

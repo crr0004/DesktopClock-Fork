@@ -743,9 +743,11 @@ public final class TimerFragment extends DeskClockFragment {
         public void run() {
             final long startTime = SystemClock.elapsedRealtime();
             // If no timers require continuous updates, avoid scheduling the next update.
+
             if (!mAdapter.updateTime()) {
                 return;
             }
+            mGridAdapter.updateTime();
             final long endTime = SystemClock.elapsedRealtime();
 
             // Try to maintain a consistent period of time between redraws.

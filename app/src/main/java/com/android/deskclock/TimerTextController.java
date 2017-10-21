@@ -16,6 +16,7 @@
 
 package com.android.deskclock;
 
+import android.content.Context;
 import android.widget.TextView;
 
 import static android.text.format.DateUtils.HOUR_IN_MILLIS;
@@ -68,5 +69,42 @@ public final class TimerTextController {
         }
 
         mTextView.setText(time);
+    }
+
+    public static String GetTimeString(long remainingTime, Context context){
+        boolean isNegative = false;
+        if (remainingTime < 0) {
+            remainingTime = -remainingTime;
+            isNegative = true;
+        }
+
+        int hours = (int) (remainingTime / HOUR_IN_MILLIS);
+        int remainder = (int) (remainingTime % HOUR_IN_MILLIS);
+
+        int minutes = (int) (remainder / MINUTE_IN_MILLIS);
+        remainder = (int) (remainder % MINUTE_IN_MILLIS);
+
+        int seconds = (int) (remainder / SECOND_IN_MILLIS);
+        remainder = (int) (remainder % SECOND_IN_MILLIS);
+
+        // Round up to the next second
+        if (!isNegative && remainder != 0) {
+            seconds++;
+            if (seconds == 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes == 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+        }
+
+        String time = Utils.getTimeString(context, hours, minutes, seconds);
+        if (isNegative && !(hours == 0 && minutes == 0 && seconds == 0)) {
+            time = "\u2212" + time;
+        }
+
+        return time;
     }
 }
