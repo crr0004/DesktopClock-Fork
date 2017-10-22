@@ -1,6 +1,7 @@
 package com.android.deskclock.timer;
 
 import android.app.FragmentManager;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class TimerPagerListAdapterDecorator extends BaseAdapter implements Timer
         if(result == null){
             result = LayoutInflater.from(parent.getContext()).inflate(R.layout.timer_item_griditem, parent, false);
             Timer timer = mTimerPagerAdapter.getTimer(position);
-            TextView text = result.findViewById(R.id.timer_griditem_editText);
+            AppCompatTextView text = result.findViewById(R.id.timer_griditem_editText);
 
             //view.update(timer);
             text.setText(TimerTextController.GetTimeString(timer.getRemainingTime(), parent.getContext()));
@@ -70,7 +71,7 @@ public class TimerPagerListAdapterDecorator extends BaseAdapter implements Timer
         for(int i : mViews.keySet()){
             Timer timer = mTimerPagerAdapter.getTimer(i);
             View view = mViews.get(i);
-            TextView text = view.findViewById(R.id.timer_griditem_editText);
+            AppCompatTextView text = view.findViewById(R.id.timer_griditem_editText);
             //view.update(timer);
             text.setText(TimerTextController.GetTimeString(timer.getRemainingTime(), view.getContext()));
         }
