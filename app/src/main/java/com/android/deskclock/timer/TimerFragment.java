@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -137,6 +138,7 @@ public final class TimerFragment extends DeskClockFragment {
 
         mGridView = view.findViewById(R.id.timer_grid_view);
         mGridView.setAdapter(mGridAdapter);
+        mGridView.setOnItemClickListener(new GridViewItemClickedListener());
 
         DataModel.getDataModel().addTimerListener(mAdapter);
         DataModel.getDataModel().addTimerListener(mTimerWatcher);
@@ -733,6 +735,17 @@ public final class TimerFragment extends DeskClockFragment {
             mTimersView.setVisibility(GONE);
             mGridView.setVisibility(VISIBLE);
             mIsGridViewable = true;
+        }
+    }
+
+    private class GridViewItemClickedListener implements GridView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            mViewPager.setCurrentItem(position);
+            mTimersView.setVisibility(VISIBLE);
+            mGridView.setVisibility(GONE);
+            mIsGridViewable = false;
         }
     }
 

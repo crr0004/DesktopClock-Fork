@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.deskclock.R;
 import com.android.deskclock.TimerTextController;
@@ -28,7 +29,6 @@ public class TimerPagerListAdapterDecorator extends BaseAdapter implements Timer
     
     TimerPagerListAdapterDecorator(FragmentManager fragmentManager){
         mTimerPagerAdapter = new TimerPagerAdapter(fragmentManager);
-        
     }
     
     @Override
@@ -48,12 +48,16 @@ public class TimerPagerListAdapterDecorator extends BaseAdapter implements Timer
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d("timerdecorator", "" + mTimerPagerAdapter.getCount());
+        Log.d("timerdecorator", "Convertview status" + (convertView == null));
         View result = mViews.get(position);
+        if(convertView != null){
+            result = convertView;
+        }
         if(result == null){
             result = LayoutInflater.from(parent.getContext()).inflate(R.layout.timer_item_griditem, parent, false);
             Timer timer = mTimerPagerAdapter.getTimer(position);
-            EditText text = result.findViewById(R.id.timer_griditem_editText);
+            TextView text = result.findViewById(R.id.timer_griditem_editText);
+
             //view.update(timer);
             text.setText(TimerTextController.GetTimeString(timer.getRemainingTime(), parent.getContext()));
             mViews.put(position, result);
@@ -66,7 +70,7 @@ public class TimerPagerListAdapterDecorator extends BaseAdapter implements Timer
         for(int i : mViews.keySet()){
             Timer timer = mTimerPagerAdapter.getTimer(i);
             View view = mViews.get(i);
-            EditText text = view.findViewById(R.id.timer_griditem_editText);
+            TextView text = view.findViewById(R.id.timer_griditem_editText);
             //view.update(timer);
             text.setText(TimerTextController.GetTimeString(timer.getRemainingTime(), view.getContext()));
         }

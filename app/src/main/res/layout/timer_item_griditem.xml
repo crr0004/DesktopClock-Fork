@@ -15,27 +15,25 @@
 -->
 
 <!-- This TimerItem discards the circle because space is limited. -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
+<!-- We need to stop this view from consuming clicks so the gridview will consume them -->
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+    android:id="@+id/timer_griditem_layout">
 
-        <EditText
+        <TextView
             android:id="@+id/timer_griditem_editText"
-            style="@android:style/Widget.AutoCompleteTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:editable="false"
             android:ems="10"
             android:gravity="center"
-            android:inputType="none" />
-    </LinearLayout>
+            android:inputType="none"
+            android:background="@android:color/transparent"
 
-</FrameLayout>
+            android:focusable="false"
+            android:clickable="false"
+            android:focusableInTouchMode="false"/>
+    </LinearLayout>
